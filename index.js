@@ -87,14 +87,26 @@ var ShopImpl = (function () {
     - Returns: 10 product names whose producer contains the specified string, ordered by producers.
    */
   ShopImpl.prototype.listProductsByProducer = function (searchString) {
-    let arrMathingObjects = [];
+    let arrMathingStrings = [];
     for (let i = 0; i < products.length; i++) {
       if (products[i].producer.indexOf(searchString) != -1){
-          arrMathingObjects.push(products[i]);  
+        arrMathingStrings.push(products[i].name);  
       };
     }
 
-    return [...arrMathingObjects];
+    const ruCollator = new Intl.Collator('ru-RU');
+    const sortArr = [...arrMathingStrings].sort((a, b) => ruCollator.compare(a, b));
+    let arrResult = [];
+  
+    if (sortArr.length > 10){
+      for (let i = 0; i < 10; i++){
+        arrResult.push(arrMathingStrings[i]);
+      }
+      // console.log(arrResultMathingStrings);
+      return arrResult;
+    }
+
+    return [...sortArr];
   };
 
   return ShopImpl;
@@ -107,19 +119,23 @@ function test(shop) {
     assert(shop.addNewProduct({ id: "2", name: "1", producer: "KKK" }));
     assert(shop.addNewProduct({ id: "3", name: "1Some Product3", producer: "Some Producer2" }));
     assert(shop.addNewProduct({ id: "5", name: "Other Product5", producer: "Other Producer41" }));
-    assert(shop.addNewProduct({ id: "11", name: "Other Product5", producer: "Other Producer411" }));
-    assert(shop.addNewProduct({ id: "12", name: "Other Product5", producer: "Other Producer4111" }));
-    assert(shop.addNewProduct({ id: "13", name: "Other Product5", producer: "Other Producer41111" }));
-    assert(shop.addNewProduct({ id: "14", name: "Other Product5", producer: "Other Producer4111111" }));
-    assert(shop.addNewProduct({ id: "15", name: "Other Product5", producer: "Other Producer41111111" }));
-    assert(shop.addNewProduct({ id: "16", name: "Other Product5", producer: "Other Producer411212" }));
-    assert(shop.addNewProduct({ id: "17", name: "Other Product5", producer: "Other Producer45212" }));
+    assert(shop.addNewProduct({ id: "11", name: "aqObther Product5", producer: "Other Producer411" }));
+    assert(shop.addNewProduct({ id: "12", name: "bcOather Product5", producer: "Other Producer4111" }));
+    assert(shop.addNewProduct({ id: "13", name: "cfyOther Product5", producer: "Other Producer41111" }));
+    assert(shop.addNewProduct({ id: "14", name: "dahhOther Product5", producer: "Other Producer4111111" }));
+    assert(shop.addNewProduct({ id: "15", name: "taOther Product5", producer: "Other Producer41111111" }));
+    assert(shop.addNewProduct({ id: "16", name: "qaOther Product5", producer: "Other Producer411212" }));
+    assert(shop.addNewProduct({ id: "17", name: "qcOther Product5", producer: "Other Producer415212" }));
+    assert(shop.addNewProduct({ id: "31", name: "qcOther Product5", producer: "Other Producer415212" }));
+    assert(shop.addNewProduct({ id: "32", name: "qcOther Product5", producer: "Other Producer415212" }));
 
     assert(shop.addNewProduct({ id: "6", name: "1", producer: "Lex" }));
     // assert(shop.deleteProduct("1"));
     // assert(shop.deleteProduct("3"));
     // assert(shop.deleteProduct("5"));
     assert(shop.addNewProduct({ id: "65", name: "Other Product5", producer: "Other Producer411" }));
+    assert(shop.addNewProduct({ id: "66", name: "Other Product5", producer: "Other Producer411" }));
+    assert(shop.addNewProduct({ id: "67", name: "Other Product5", producer: "Other Producer411" }));
     // assert(shop.addNewProduct({ id: "65", name: "Other Product5", producer: "Other Producer4" }));
     assert(shop.addNewProduct({ id: "511", name: "1Other Product5", producer: "Other Produce" }));
     // assert(shop.deleteProduct("2"));
@@ -130,10 +146,11 @@ function test(shop) {
     assert(byNames.length == 7);
     assert(byNamess.length == 10);
     assert(byNames.indexOf("S21Lexafx") >= 0);
-    var byProducer = shop.listProductsByProducer("12");
+    var byProducer = shop.listProductsByProducer("41");
     // console.log(byNamess);
-    console.log(byProducer);
-    // assert(byProducer.length == 10);
+    // console.log(byProducer);
+    assert(byProducer.length == 10);
+    console.log(byProducer)
 }
 
 function assert(condition) {
