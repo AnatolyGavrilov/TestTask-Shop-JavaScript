@@ -68,7 +68,7 @@ var ShopImpl = (function () {
     for (let i = 0; i <arrMathingStrings.length; i++){
       for (let j = 0; j < result.length; j++){
         if (arrMathingStrings[i] == result[j]){
-          arrMathingStrings[i] = arrMathingStrings[i] + arrMathingObjects[i].producer;
+          arrMathingStrings[i] =  arrMathingObjects[i].producer + " - " + arrMathingStrings[i];
         }
       }
     }
@@ -87,70 +87,87 @@ var ShopImpl = (function () {
     - Returns: 10 product names whose producer contains the specified string, ordered by producers.
    */
   ShopImpl.prototype.listProductsByProducer = function (searchString) {
-    let arrMathingStrings = [];
+    let arrMathingObjects = [];
+    let arrMathingNames = [];
+    let arrMathingProducers = [];
     for (let i = 0; i < products.length; i++) {
       if (products[i].producer.indexOf(searchString) != -1){
-        arrMathingStrings.push(products[i].name);  
+        arrMathingObjects.push(products[i]);  
       };
     }
-
-    const ruCollator = new Intl.Collator('ru-RU');
-    const sortArr = [...arrMathingStrings].sort((a, b) => ruCollator.compare(a, b));
-    let arrResult = [];
-  
-    if (sortArr.length > 10){
-      for (let i = 0; i < 10; i++){
-        arrResult.push(arrMathingStrings[i]);
+   
+    let cuttingObject = [];
+    if (arrMathingObjects.length > 10) {
+      for (i = 0; i < 10; i++){
+        cuttingObject.push(arrMathingObjects[i]);
       }
-      // console.log(arrResultMathingStrings);
-      return arrResult;
+    } else {
+      for (i = 0; i < arrMathingObjects.length; i++){
+        cuttingObject.push(arrMathingObjects[i]);
+      }
     }
 
-    return [...sortArr];
+    // for (let i = 0; i < cuttingObject.length; i++){
+    //   arrMathingNames.push(cuttingObject[i].name);
+    // }
+
+    // for (let i = 0; i < cuttingObject.length; i++){
+    //   arrMathingProducers.push(cuttingObject[i].producer);
+    // }
+
+    // const ruCollator = new Intl.Collator('ru-RU');
+    // const sortArr = [...arrMathingProducers].sort((a, b) => ruCollator.compare(a, b));
+    
+    function SortArray(x, y){
+      if (x.producer < y.producer) {return -1;}
+      if (x.producer > y.producer) {return 1;}
+      return 0;
+  }
+  let re = [];
+  var s = cuttingObject.sort(SortArray);
+  for (i = 0; i < s.length; i++){
+    re.push(s[i].name);
+  }
+  // console.log(re);
+    return [...re];
   };
 
   return ShopImpl;
 }());
 
 function test(shop) {
-    assert(shop.addNewProduct({ id: "1", name: "11", producer: "Lexx" }));
-    assert(shop.addNewProduct({ id: "20", name: "S21", producer: "Lexafx" }));
-    assert(shop.addNewProduct({ id: "21", name: "S21", producer: "Lexxafx" }));
-    assert(shop.addNewProduct({ id: "2", name: "1", producer: "KKK" }));
-    assert(shop.addNewProduct({ id: "3", name: "1Some Product3", producer: "Some Producer2" }));
-    assert(shop.addNewProduct({ id: "5", name: "Other Product5", producer: "Other Producer41" }));
-    assert(shop.addNewProduct({ id: "11", name: "aqObther Product5", producer: "Other Producer411" }));
-    assert(shop.addNewProduct({ id: "12", name: "bcOather Product5", producer: "Other Producer4111" }));
-    assert(shop.addNewProduct({ id: "13", name: "cfyOther Product5", producer: "Other Producer41111" }));
-    assert(shop.addNewProduct({ id: "14", name: "dahhOther Product5", producer: "Other Producer4111111" }));
-    assert(shop.addNewProduct({ id: "15", name: "taOther Product5", producer: "Other Producer41111111" }));
-    assert(shop.addNewProduct({ id: "16", name: "qaOther Product5", producer: "Other Producer411212" }));
-    assert(shop.addNewProduct({ id: "17", name: "qcOther Product5", producer: "Other Producer415212" }));
-    assert(shop.addNewProduct({ id: "31", name: "qcOther Product5", producer: "Other Producer415212" }));
-    assert(shop.addNewProduct({ id: "32", name: "qcOther Product5", producer: "Other Producer415212" }));
-
-    assert(shop.addNewProduct({ id: "6", name: "1", producer: "Lex" }));
-    // assert(shop.deleteProduct("1"));
-    // assert(shop.deleteProduct("3"));
-    // assert(shop.deleteProduct("5"));
-    assert(shop.addNewProduct({ id: "65", name: "Other Product5", producer: "Other Producer411" }));
-    assert(shop.addNewProduct({ id: "66", name: "Other Product5", producer: "Other Producer411" }));
-    assert(shop.addNewProduct({ id: "67", name: "Other Product5", producer: "Other Producer411" }));
-    // assert(shop.addNewProduct({ id: "65", name: "Other Product5", producer: "Other Producer4" }));
-    assert(shop.addNewProduct({ id: "511", name: "1Other Product5", producer: "Other Produce" }));
-    // assert(shop.deleteProduct("2"));
-    assert(shop.addNewProduct({ id: "522", name: "Other Product5", producer: "Other Producer14" }));
-    assert(shop.addNewProduct({ id: "523", name: "Other Pro2duct5", producer: "Other Producer14" }));
-    var byNames = shop.listProductsByName("1");
-    var byNamess = shop.listProductsByName("5");
-    assert(byNames.length == 7);
-    assert(byNamess.length == 10);
-    assert(byNames.indexOf("S21Lexafx") >= 0);
-    var byProducer = shop.listProductsByProducer("41");
-    // console.log(byNamess);
-    // console.log(byProducer);
-    assert(byProducer.length == 10);
-    console.log(byProducer)
+  assert(!shop.deleteProduct("1"));
+  assert(shop.addNewProduct({ id: "1", name: "1", producer: "Lex" }));
+  assert(!shop.addNewProduct({ id: "1", name: "any name because we check id only", producer: "any producer" }));
+  assert(shop.deleteProduct("1"));
+  assert(shop.addNewProduct({ id: "3", name: "Some Product3", producer: "Some Producer2" }));
+  assert(shop.addNewProduct({ id: "4", name: "Some Product1", producer: "Some Producer3" }));
+  assert(shop.addNewProduct({ id: "2", name: "Some Product2", producer: "Some Producer2" }));
+  assert(shop.addNewProduct({ id: "1", name: "Some Product1", producer: "Some Producer1" }));
+  assert(shop.addNewProduct({ id: "5", name: "Other Product5", producer: "Other Producer4" }));
+  assert(shop.addNewProduct({ id: "6", name: "Other Product6", producer: "Other Producer4" }));
+  assert(shop.addNewProduct({ id: "7", name: "Other Product7", producer: "Other Producer4" }));
+  assert(shop.addNewProduct({ id: "8", name: "Other Product8", producer: "Other Producer4" }));
+  assert(shop.addNewProduct({ id: "9", name: "Other Product9", producer: "Other Producer4" }));
+  assert(shop.addNewProduct({ id: "10", name: "Other Product10", producer: "Other Producer4" }));
+  assert(shop.addNewProduct({ id: "11", name: "Other Product11", producer: "Other Producer4" }));
+  var byNames = shop.listProductsByName("Product");
+  assert(byNames.length == 10);
+  byNames = shop.listProductsByName("Some Product");
+  assert(byNames.length == 4);
+  assert(byNames.indexOf("Some Producer3 - Some Product1") >= 0);
+  assert(byNames.indexOf("Some Product2") >= 0);
+  assert(byNames.indexOf("Some Product3") >= 0);
+  assert(byNames.indexOf("Some Product1") < 0);
+  assert(byNames.indexOf("Some Producer1 - Some Product1") >= 0);
+  var byProducer = shop.listProductsByProducer("Producer");
+  assert(byProducer.length == 10);
+  byProducer = shop.listProductsByProducer("Some Producer");
+  assert(byProducer.length == 4);
+  assert(byProducer[0] == "Some Product1");
+  assert(byProducer[1] == "Some Product2" || byProducer[1] == "Some Product3");
+  assert(byProducer[2] == "Some Product2" || byProducer[2] == "Some Product3");
+  assert(byProducer[3] == "Some Product1");
 }
 
 function assert(condition) {
