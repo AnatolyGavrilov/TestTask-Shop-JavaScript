@@ -64,9 +64,12 @@ var ShopImpl = (function () {
       countItems[item] = countItems[item] ? countItems[item] + 1 : 1;
     }
     const result = Object.keys(countItems).filter((item) => countItems[item] > 1);
+    // console.log(result);
     for (let i = 0; i <arrMathingStrings.length; i++){
-      if (arrMathingStrings[i] == result[0]){
-        arrMathingStrings[i] = arrMathingStrings[i] + arrMathingObjects[i].producer;
+      for (let j = 0; j < result.length; j++){
+        if (arrMathingStrings[i] == result[j]){
+          arrMathingStrings[i] = arrMathingStrings[i] + arrMathingObjects[i].producer;
+        }
       }
     }
     if (arrMathingStrings.length > 10){
@@ -93,6 +96,8 @@ var ShopImpl = (function () {
 
 function test(shop) {
     assert(shop.addNewProduct({ id: "1", name: "11", producer: "Lexx" }));
+    assert(shop.addNewProduct({ id: "20", name: "S21", producer: "Lexafx" }));
+    assert(shop.addNewProduct({ id: "21", name: "S21", producer: "Lexxafx" }));
     assert(shop.addNewProduct({ id: "2", name: "1", producer: "KKK" }));
     assert(shop.addNewProduct({ id: "3", name: "1Some Product3", producer: "Some Producer2" }));
     assert(shop.addNewProduct({ id: "5", name: "Other Product5", producer: "Other Producer41" }));
@@ -103,6 +108,7 @@ function test(shop) {
     assert(shop.addNewProduct({ id: "15", name: "Other Product5", producer: "Other Producer41111111" }));
     assert(shop.addNewProduct({ id: "16", name: "Other Product5", producer: "Other Producer411212" }));
     assert(shop.addNewProduct({ id: "17", name: "Other Product5", producer: "Other Producer45212" }));
+
     assert(shop.addNewProduct({ id: "6", name: "1", producer: "Lex" }));
     // assert(shop.deleteProduct("1"));
     // assert(shop.deleteProduct("3"));
@@ -115,7 +121,7 @@ function test(shop) {
     assert(shop.addNewProduct({ id: "523", name: "Other Pro2duct5", producer: "Other Producer14" }));
     var byNames = shop.listProductsByName("1");
     var byNamess = shop.listProductsByName("5");
-    assert(byNames.length == 5);
+    assert(byNames.length == 7);
     assert(byNamess.length == 10);
     // console.log(byNamess);
 }
