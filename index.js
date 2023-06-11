@@ -48,14 +48,15 @@ var ShopImpl = (function () {
     - Returns: 10 product names containing the specified string. If there are several products with the same name, producer's name is appended to product's name.
    */
   ShopImpl.prototype.listProductsByName = function (searchString) {
-    let arrMathingObjects = [];
     const countItems = {}; 
+    let arrMathingObjects = [];
+    let arrMathingStrings = [];
+    let arrResultMathingStrings = [];
     for (let i = 0; i < products.length; i++) {
         if (products[i].name.indexOf(searchString) != -1){
             arrMathingObjects.push(products[i]);  
         };
     }
-    let arrMathingStrings = [];
     for (i = 0; i < arrMathingObjects.length; i++ ){
       arrMathingStrings[i] = arrMathingObjects[i].name;
     }
@@ -68,8 +69,15 @@ var ShopImpl = (function () {
         arrMathingStrings[i] = arrMathingStrings[i] + arrMathingObjects[i].producer;
       }
     }
+    if (arrMathingStrings.length > 10){
+      for (let i = 0; i < 10; i++){
+        arrResultMathingStrings.push(arrMathingStrings[i]);
+      }
+      console.log(arrResultMathingStrings);
+      return arrResultMathingStrings;
+    }
     console.log(arrMathingStrings);
-    return arrMathingStrings;
+    return [...arrMathingStrings];
   };
 
   /**
@@ -88,6 +96,13 @@ function test(shop) {
     assert(shop.addNewProduct({ id: "2", name: "1", producer: "KKK" }));
     assert(shop.addNewProduct({ id: "3", name: "1Some Product3", producer: "Some Producer2" }));
     assert(shop.addNewProduct({ id: "5", name: "Other Product5", producer: "Other Producer41" }));
+    assert(shop.addNewProduct({ id: "11", name: "Other Product5", producer: "Other Producer411" }));
+    assert(shop.addNewProduct({ id: "12", name: "Other Product5", producer: "Other Producer4111" }));
+    assert(shop.addNewProduct({ id: "13", name: "Other Product5", producer: "Other Producer41111" }));
+    assert(shop.addNewProduct({ id: "14", name: "Other Product5", producer: "Other Producer4111111" }));
+    assert(shop.addNewProduct({ id: "15", name: "Other Product5", producer: "Other Producer41111111" }));
+    assert(shop.addNewProduct({ id: "16", name: "Other Product5", producer: "Other Producer411212" }));
+    assert(shop.addNewProduct({ id: "17", name: "Other Product5", producer: "Other Producer45212" }));
     assert(shop.addNewProduct({ id: "6", name: "1", producer: "Lex" }));
     // assert(shop.deleteProduct("1"));
     // assert(shop.deleteProduct("3"));
@@ -101,7 +116,8 @@ function test(shop) {
     var byNames = shop.listProductsByName("1");
     var byNamess = shop.listProductsByName("5");
     assert(byNames.length == 5);
-    assert(byNamess.length == 5);
+    assert(byNamess.length == 10);
+    // console.log(byNamess);
 }
 
 function assert(condition) {
