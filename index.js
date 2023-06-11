@@ -18,19 +18,16 @@ var ShopImpl = (function () {
       console.log('Я вхожу суда 1 раз');
       return true;
     } else {
-      products.forEach((oneProduct) => {
-        if (oneProduct.id == product.id){
-          console.log("я что суда попал?");
-          return true;
+      for (let i = 0; i < products.length; i++){
+        if (products[i].id == product.id){
+          break;
         } else {
-          console.log("вывод продукта");
-          console.log(product);
           products.push(product);
-          return true;
+          break;
         }
-      })
+      }
     }
-    console.log("Может суда?");
+    console.log('-------')
     console.log(products);
     return true
   };
@@ -64,6 +61,8 @@ var ShopImpl = (function () {
 }());
 
 function test(shop) {
+    assert(shop.addNewProduct({ id: "1", name: "1", producer: "Lex" }));
+    assert(shop.addNewProduct({ id: "1", name: "1", producer: "Lex" }));
     assert(shop.addNewProduct({ id: "1", name: "1", producer: "Lex" }));
     assert(shop.addNewProduct({ id: "3", name: "Some Product3", producer: "Some Producer2" }));
     assert(shop.addNewProduct({ id: "5", name: "Other Product5", producer: "Other Producer4" }));
