@@ -23,12 +23,10 @@ var ShopImpl = (function () {
           return false;
         }
       }
-      for (let i = 0; i < products.length; i++){
-        products.push(product);
-        console.log('-----')
-        console.log(products);
-        return true;
-      }
+      products.push(product);
+      console.log('-----')
+      console.log(products);
+      return true;
     }
   };
 
@@ -64,9 +62,12 @@ function test(shop) {
     assert(shop.addNewProduct({ id: "1", name: "1", producer: "Lex" }));
     assert(shop.addNewProduct({ id: "3", name: "Some Product3", producer: "Some Producer2" }));
     assert(shop.addNewProduct({ id: "5", name: "Other Product5", producer: "Other Producer4" }));
+    assert(shop.addNewProduct({ id: "6", name: "1", producer: "Lex" }));
+   
     assert(shop.addNewProduct({ id: "65", name: "Other Product5", producer: "Other Producer4" }));
+    // assert(shop.addNewProduct({ id: "65", name: "Other Product5", producer: "Other Producer4" }));
     assert(shop.addNewProduct({ id: "511", name: "Other Product5", producer: "Other Producer4" }));
-    assert(shop.addNewProduct({ id: "511", name: "Other Product5", producer: "Other Producer4" }));
+   
 }
 
 function assert(condition) {
