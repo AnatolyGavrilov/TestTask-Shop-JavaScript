@@ -76,10 +76,10 @@ var ShopImpl = (function () {
       for (let i = 0; i < 10; i++){
         arrResultMathingStrings.push(arrMathingStrings[i]);
       }
-      console.log(arrResultMathingStrings);
+      // console.log(arrResultMathingStrings);
       return arrResultMathingStrings;
     }
-    console.log(arrMathingStrings);
+    // console.log(arrMathingStrings);
     return [...arrMathingStrings];
   };
 
@@ -87,8 +87,14 @@ var ShopImpl = (function () {
     - Returns: 10 product names whose producer contains the specified string, ordered by producers.
    */
   ShopImpl.prototype.listProductsByProducer = function (searchString) {
-    // TODO: your implementation goes here
-    return [];
+    let arrMathingObjects = [];
+    for (let i = 0; i < products.length; i++) {
+      if (products[i].producer.indexOf(searchString) != -1){
+          arrMathingObjects.push(products[i]);  
+      };
+    }
+
+    return [...arrMathingObjects];
   };
 
   return ShopImpl;
@@ -123,7 +129,11 @@ function test(shop) {
     var byNamess = shop.listProductsByName("5");
     assert(byNames.length == 7);
     assert(byNamess.length == 10);
+    assert(byNames.indexOf("S21Lexafx") >= 0);
+    var byProducer = shop.listProductsByProducer("12");
     // console.log(byNamess);
+    console.log(byProducer);
+    // assert(byProducer.length == 10);
 }
 
 function assert(condition) {
