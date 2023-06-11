@@ -35,7 +35,12 @@ var ShopImpl = (function () {
     - Returns: true if the product with same id existed in the Shop, false – otherwise.
    */
   ShopImpl.prototype.deleteProduct = function (id) {
-    // TODO: your implementation goes here
+    for (let i = 0; i < products.length; i++){
+      if (products[i].id == id){
+        products.splice(i,1);
+        return true;
+      } 
+    }
     return false;
   };
 
@@ -63,10 +68,14 @@ function test(shop) {
     assert(shop.addNewProduct({ id: "3", name: "Some Product3", producer: "Some Producer2" }));
     assert(shop.addNewProduct({ id: "5", name: "Other Product5", producer: "Other Producer4" }));
     assert(shop.addNewProduct({ id: "6", name: "1", producer: "Lex" }));
-   
+    assert(shop.deleteProduct("1"));
+    assert(shop.deleteProduct("3"));
+    assert(shop.deleteProduct("5"));
     assert(shop.addNewProduct({ id: "65", name: "Other Product5", producer: "Other Producer4" }));
     // assert(shop.addNewProduct({ id: "65", name: "Other Product5", producer: "Other Producer4" }));
     assert(shop.addNewProduct({ id: "511", name: "Other Product5", producer: "Other Producer4" }));
+    assert(shop.deleteProduct("2"));
+    assert(shop.addNewProduct({ id: "522", name: "Other Product5", producer: "Other Producer4" }));
    
 }
 
