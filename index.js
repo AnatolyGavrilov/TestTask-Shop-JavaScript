@@ -45,10 +45,11 @@ var ShopImpl = (function () {
     - Returns: 10 product names containing the specified string. If there are several products with the same name, producer's name is appended to product's name.
    */
   ShopImpl.prototype.listProductsByName = function (searchString) {
-    const countItems = {}; 
+    let countItems = {}; 
     let arrMathingObjects = [];
     let arrMathingStrings = [];
     let arrCroppedMathingStrings = [];
+    let duplicateNames = [];
 
     for (let i = 0; i < products.length; i++) {
         if (products[i].name.indexOf(searchString) != -1){
@@ -64,8 +65,8 @@ var ShopImpl = (function () {
       countItems[item] = countItems[item] ? countItems[item] + 1 : 1;
     }
 
-    const duplicateNames = Object.keys(countItems).filter((item) => countItems[item] > 1);
-    
+    duplicateNames = Object.keys(countItems).filter((item) => countItems[item] > 1);
+       
     for (let i = 0; i <arrMathingStrings.length; i++){
       for (let j = 0; j < duplicateNames.length; j++){
         if (arrMathingStrings[i] == duplicateNames[j]){
