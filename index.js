@@ -15,7 +15,6 @@ var ShopImpl = (function () {
   ShopImpl.prototype.addNewProduct = function (product) {
     if (products.length == 0){
       products.push(product);
-      // console.log('Я вхожу суда 1 раз');
       return true;
     } else {
       for (let i = 0; i < products.length; i++){
@@ -24,8 +23,6 @@ var ShopImpl = (function () {
         }
       }
       products.push(product);
-      // console.log('-----')
-      // console.log(products);
       return true;
     }
   };
@@ -51,36 +48,39 @@ var ShopImpl = (function () {
     const countItems = {}; 
     let arrMathingObjects = [];
     let arrMathingStrings = [];
-    let arrResultMathingStrings = [];
+    let arrCroppedMathingStrings = [];
+
     for (let i = 0; i < products.length; i++) {
         if (products[i].name.indexOf(searchString) != -1){
             arrMathingObjects.push(products[i]);  
         };
     }
+
     for (i = 0; i < arrMathingObjects.length; i++ ){
       arrMathingStrings[i] = arrMathingObjects[i].name;
     }
+
     for (const item of arrMathingStrings) {
       countItems[item] = countItems[item] ? countItems[item] + 1 : 1;
     }
-    const result = Object.keys(countItems).filter((item) => countItems[item] > 1);
-    // console.log(result);
+
+    const duplicateNames = Object.keys(countItems).filter((item) => countItems[item] > 1);
+    
     for (let i = 0; i <arrMathingStrings.length; i++){
-      for (let j = 0; j < result.length; j++){
-        if (arrMathingStrings[i] == result[j]){
+      for (let j = 0; j < duplicateNames.length; j++){
+        if (arrMathingStrings[i] == duplicateNames[j]){
           arrMathingStrings[i] =  arrMathingObjects[i].producer + " - " + arrMathingStrings[i];
         }
       }
     }
+
     if (arrMathingStrings.length > 10){
       for (let i = 0; i < 10; i++){
-        arrResultMathingStrings.push(arrMathingStrings[i]);
+        arrCroppedMathingStrings.push(arrMathingStrings[i]);
       }
-      // console.log(arrResultMathingStrings);
-      return arrResultMathingStrings;
+      return arrCroppedMathingStrings;
     }
-    // console.log(arrMathingStrings);
-    return [...arrMathingStrings];
+    return arrMathingStrings;
   };
 
   /**
@@ -88,49 +88,39 @@ var ShopImpl = (function () {
    */
   ShopImpl.prototype.listProductsByProducer = function (searchString) {
     let arrMathingObjects = [];
-    let arrMathingNames = [];
-    let arrMathingProducers = [];
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].producer.indexOf(searchString) != -1){
-        arrMathingObjects.push(products[i]);  
-      };
-    }
-   
-    let cuttingObject = [];
-    if (arrMathingObjects.length > 10) {
-      for (i = 0; i < 10; i++){
-        cuttingObject.push(arrMathingObjects[i]);
-      }
-    } else {
-      for (i = 0; i < arrMathingObjects.length; i++){
-        cuttingObject.push(arrMathingObjects[i]);
-      }
-    }
+    let arrCroppedMatchingObjects = [];
+    let arrSortedCroopedObjects = [];
+    let namesSortedByProducer = [];
 
-    // for (let i = 0; i < cuttingObject.length; i++){
-    //   arrMathingNames.push(cuttingObject[i].name);
-    // }
-
-    // for (let i = 0; i < cuttingObject.length; i++){
-    //   arrMathingProducers.push(cuttingObject[i].producer);
-    // }
-
-    // const ruCollator = new Intl.Collator('ru-RU');
-    // const sortArr = [...arrMathingProducers].sort((a, b) => ruCollator.compare(a, b));
-    
     function SortArray(x, y){
       if (x.producer < y.producer) {return -1;}
       if (x.producer > y.producer) {return 1;}
       return 0;
-  }
-  let re = [];
-  var s = cuttingObject.sort(SortArray);
-  for (i = 0; i < s.length; i++){
-    re.push(s[i].name);
-  }
-  // console.log(re);
-    return [...re];
-  };
+    }
+
+    for (let i = 0; i < products.length; i++) {
+      if (products[i].producer.indexOf(searchString) != -1) {
+        arrMathingObjects.push(products[i]);  
+      };
+    }
+   
+    if (arrMathingObjects.length > 10) {
+      for (i = 0; i < 10; i++) {
+        arrCroppedMatchingObjects.push(arrMathingObjects[i]);
+      }
+    } else {
+      for (i = 0; i < arrMathingObjects.length; i++) {
+        arrCroppedMatchingObjects.push(arrMathingObjects[i]);
+      }
+    }
+    
+    arrSortedCroopedObjects = arrCroppedMatchingObjects.sort(SortArray);
+
+    for (i = 0; i < arrSortedCroopedObjects.length; i++){
+      namesSortedByProducer.push(arrSortedCroopedObjects[i].name);
+    }
+      return namesSortedByProducer;
+    };
 
   return ShopImpl;
 }());
